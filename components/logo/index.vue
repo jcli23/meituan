@@ -34,8 +34,8 @@
             <img src="//s0.meituan.net/bs/fe-web-meituan/2d05c2b/img/avatar.jpg" alt="">
           </div>
           <div class="hi">HI!您好</div>
-          <div class="register">注册</div>
-          <div class="login">立即登录</div>
+          <div class="register" @click="register">注册</div>
+          <div class="login" @click="login">立即登录</div>
         </div>
         <div class="bottom">
           <div class="img">
@@ -67,7 +67,9 @@ export default {
   },
   components: {},
   methods: {
-    
+    login(){
+      this.$router.push('/login/login')
+    }
   },
   mounted() {
     
