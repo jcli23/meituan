@@ -22,7 +22,8 @@ export default {
      ** Global CSS
      */
     css: [
-        'iview/dist/styles/iview.css'
+        'iview/dist/styles/iview.css',
+        'assets/images/font_1583181_ye2o0i8lf5/iconfont.css'
     ],
     /*
      ** Plugins to load before mounting the App

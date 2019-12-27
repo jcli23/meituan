@@ -3,7 +3,7 @@
     <div class="top">
       <div class="top-main">
         <div class="left">
-          <img src="../assets/images/postion.png" alt="position">
+          <img src="../assets/images/postion.png" alt="position" />
           <div>{{city}}</div>
           <div class="exchange">切换城市</div>
           <div class="cities">
@@ -55,58 +55,87 @@
             <div class="block">
               <div class="bigbox">
                 <div class="one">
-                <div class="title">酒店旅游</div>
-                <div class="one_title">
-                  <div v-for="(item,index) in hotelList" :key="index" class="box">
-                    <div class="item">{{item}}</div>
+                  <div class="title">酒店旅游</div>
+                  <div class="one_title">
+                    <div v-for="(item,index) in hotelList" :key="index" class="box">
+                      <div class="item">{{item}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="two">
-                <div class="title">吃美食</div>
-                <div class="one_title">
-                  <div v-for="(item,index) in foodList" :key="index" class="box">
-                    <div class="item">{{item}}</div>
+                <div class="two">
+                  <div class="title">吃美食</div>
+                  <div class="one_title">
+                    <div v-for="(item,index) in foodList" :key="index" class="box">
+                      <div class="item">{{item}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="three">
-                <div class="title">吃美食</div>
-                <div class="one_title">
-                  <div v-for="(item,index) in movieList" :key="index" class="box">
-                    <div class="item">{{item}}</div>
+                <div class="three">
+                  <div class="title">看电影</div>
+                  <div class="one_title">
+                    <div v-for="(item,index) in movieList" :key="index" class="box">
+                      <div class="item">{{item}}</div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="four">
-                <div class="title">手机应用</div>
-                <div class="one_title">
-                  <div v-for="(item,index) in pic" :key="index" class="box">
-                    <img :src="item">
+                <div class="four">
+                  <div class="title">手机应用</div>
+                  <div class="one_title">
+                    <div v-for="(item,index) in pic" :key="index" class="box">
+                      <img :src="item" />
+                    </div>
                   </div>
                 </div>
-              </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <top_header></top_header>
-    <div></div>
+    <div class="top_header">
+      <top_header></top_header>
+    </div>
+    <div class="page_index">
+      <div class="center">
+        <classification class="left" :menu="menu"></classification>
+        <div class="center_center">
+          <logo :banner="banner"></logo>
+        </div>
+      </div>
+    </div>
+    <div class="quality">
+      <div class="center">
+        <quality></quality>
+      </div>
+    </div>
+    <div class="all_bottom">
+      <div class="center">
+        <low></low>
+      </div>
+    </div>
   </div>
-</template>
+</template> 
 
 <script>
-import top_header from "../components/top_header/top_header"
+import top_header from "../components/top_header/index";
+import classification from "../components/classification/index";
+import logo from "../components/logo/index";
+import quality from "../components/quality/index";
+import low from "../components/footer/index";
 export default {
   components: {
-    top_header
+    top_header,
+    classification,
+    logo,
+    quality,
+    low
   },
-  data(){
-     return{
-        city:'',
-        hotelList: [
+  data() {
+    return {
+      city: "",
+      menu:[],
+      banner:[],
+      hotelList: [
         "国际机票",
         "火车票",
         "榛果民宿",
@@ -138,242 +167,243 @@ export default {
         "//s1.meituan.net/bs/fe-web-meituan/404d350/img/appicons/dianping.png",
         "//s1.meituan.net/bs/fe-web-meituan/404d350/img/appicons/maoyan.png"
       ]
-     }
+    };
   },
-  methods:{
-
-  },
-  mounted(){
-
-  },
+  methods: {},
+  mounted() {},
   async asyncData(cty) {
-    let [menu,position,hotCity,city]=await Promise.all([
-      cty.$axios.get('menu'),
-      cty.$axios.get('position'),
-      cty.$axios.get('hotCity'),
-      cty.$axios.get('city')
-    ])
-    console.log(menu.data.data)
-    console.log(position.data.data)
-    console.log(hotCity.data.data)
-    console.log(city.data.data)
-    cty.store.state.city=position.data.data.city
+    let [menu, position, hotCity,city,banner] = await Promise.all([
+      cty.$axios.get("menu"),
+      cty.$axios.get("position"),
+      cty.$axios.get("hotCity"),
+      cty.$axios.get("city"),
+      cty.$axios.get("banner")
+    ]);
+    // console.log(menu.data.data)
+    // console.log(position.data.data)
+    // console.log(hotCity.data.data)
+    console.log(banner.data.data)
+    cty.store.state.city = position.data.data.city;
     return {
-      city: position.data.data.city,
-    }
-  },
-}
+      city: position.data.data.city.replace("市",""),
+      menu:menu.data.data.menu,
+      banner:banner.data.data
+    };
+  }
+};
 </script>
 
 <style scoped lang='scss'>
-  .top{
-    width: 100%;
+.top {
+  width: 100%;
+  height: 40px;
+  background: #f8f8f8;
+  .top-main {
+    max-width: 1190px;
+    min-width: 960px;
     height: 40px;
-    background: #F8F8F8;
-    .top-main{
-      max-width: 1190px;
-      min-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    .left {
       height: 40px;
-      margin: 0 auto;
       display: flex;
-      justify-content: space-between;
-      .left{
-        height: 40px;
+      align-items: center;
+      img {
+        width: 12px;
+        height: 12px;
+      }
+      .exchange {
+        padding: 0 2px;
+        margin: 0 4px;
+        font-size: 12px;
+        height: 18px;
+        border: 1px solid #999;
+        &:hover {
+          color: #fe8c00;
+        }
+      }
+      .cities {
         display: flex;
-        align-items: center;
-        img{
-          width: 12px;
-          height: 12px;
-        }
-        .exchange{
-          padding: 0 2px;
+        font-size: 12px;
+        .font1 {
           margin: 0 4px;
-          font-size: 12px;
-          height: 18px;
-          border: 1px solid #999;
-          &:hover{
-            color: #FE8C00;
+          &:hover {
+            color: #fe8c00;
           }
         }
-        .cities{
-          display: flex;
-          font-size: 12px;
-          .font1{
-            margin: 0 4px;
-            &:hover{
-              color:  #FE8C00;
-            }
-          }
-          .font2{
-            margin: 0 4px;
-            &:hover{
-              color:  #FE8C00;
-            }
-          }
-          .font3{
-            margin: 0 4px;
-            &:hover{
-              color:  #FE8C00;
-            }
+        .font2 {
+          margin: 0 4px;
+          &:hover {
+            color: #fe8c00;
           }
         }
-        .register_login{
-          margin: 0 0 0 15px;
-          display: flex;
-          .login{
-            font-size: 12px;
-            margin: 0 0 0 10px;
-            color: #FE8C00;
-          }
-          .register{
-            font-size: 12px;
-            margin: 0 0 0 10px;
+        .font3 {
+          margin: 0 4px;
+          &:hover {
+            color: #fe8c00;
           }
         }
       }
-      .right{
-        height: 40px;
+      .register_login {
+        margin: 0 0 0 15px;
         display: flex;
-        align-items: center;
-        .box1{
-          .block{
-            display: none;
-            position: absolute;
-            top: 40px;
-            border: 1px solid #f2f2f2;
-            border-top: none;
-            .block_font{
-              font-size: 12px;
-              padding: 8px 12px;
-              background: white;
-              border-top: none;
-              border-bottom: none;
-              &:hover{
-                color: #FE8C00;
-              }
-            }
-          }
-          .font{
+        .login {
+          font-size: 12px;
+          margin: 0 0 0 10px;
+          color: #fe8c00;
+        }
+        .register {
+          font-size: 12px;
+          margin: 0 0 0 10px;
+        }
+      }
+    }
+    .right {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      .box1 {
+        .block {
+          display: none;
+          position: absolute;
+          top: 40px;
+          border: 1px solid #f2f2f2;
+          border-top: none;
+          .block_font {
             font-size: 12px;
-            padding: 14px 12px;
-            &:hover{
-               color: #FE8C00;
-               background: white;
-             }
-          }
-          &:hover{
-            .font{
-              background: white;
-            }
-            .block{
-              display: block;
+            padding: 8px 12px;
+            background: white;
+            border-top: none;
+            border-bottom: none;
+            &:hover {
+              color: #fe8c00;
             }
           }
         }
-        .box2{
+        .font {
           font-size: 12px;
           padding: 14px 12px;
-          &:hover{
-            color: #FE8C00;
-          }
-        }
-        .box3{
-          position: relative;
-          .block{
-            display: none;
-            position: absolute;
-            top: 41px;
-            right: 0;
-            border: 1px solid #f2f2f2;
-            border-top: none;
-            .block_font{
-              font-size: 12px;
-              min-width: 120px;
-              height: 36px;
-              text-align: center;
-              line-height: 36px;
-              background: white;
-              border-top: none;
-              border-bottom: none;
-              &:hover{
-                color: #FE8C00;
-              }
-            }
-          }
-          .font{
-            font-size: 12px;
-            padding: 14px 12px;
-            &:hover{
-               color: #FE8C00;
-               background: white;
-             }
-          }
-          &:hover{
-            .font{
-              background: white;
-            }
-            .block{
-              display: block;
-            }
-          }
-        }
-        .box4{
-          position: relative;
-          .block{
-            display: none;
-            position: absolute;
-            top: 43px;
-            right: -1px;
-            border: 1px solid #f2f2f2;
-            border-top: none;
-            .block_font{
-              font-size: 12px;
-              min-width: 80px;
-              height: 36px;
-              text-align: center;
-              line-height: 36px;
-              background: white;
-              &:hover{
-                color: #FE8C00;
-              }
-            }
-          }
-          .font{
-            font-size: 12px;
-            padding: 14px 12px;
-            &:hover{
-               color: #FE8C00;
-               background: white;
-             }
-          }
-          &:hover{
-            .font{
-              background: white;
-            }
-            .block{
-              display: block;
-            }
-          }
-        }
-        .box5{
-          position: relative;
-          .block{
-            display: none;
-            width: 1190px;
+          &:hover {
+            color: #fe8c00;
             background: white;
-            height: 300px;
-            position: absolute;
-            top: 43px;
-            right: 1px;
-            border: 1px solid #f2f2f2;
+          }
+        }
+        &:hover {
+          .font {
+            background: white;
+          }
+          .block {
+            display: block;
+          }
+        }
+      }
+      .box2 {
+        font-size: 12px;
+        padding: 14px 12px;
+        &:hover {
+          color: #fe8c00;
+        }
+      }
+      .box3 {
+        position: relative;
+        .block {
+          display: none;
+          position: absolute;
+          top: 41px;
+          right: 0;
+          border: 1px solid #f2f2f2;
+          border-top: none;
+          .block_font {
+            font-size: 12px;
+            min-width: 120px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+            background: white;
             border-top: none;
-            .bigbox{
-              display: flex;
-              width: 100%;
-              height: 400px;
-              .one{
+            border-bottom: none;
+            &:hover {
+              color: #fe8c00;
+            }
+          }
+        }
+        .font {
+          font-size: 12px;
+          padding: 14px 12px;
+          &:hover {
+            color: #fe8c00;
+            background: white;
+          }
+        }
+        &:hover {
+          .font {
+            background: white;
+          }
+          .block {
+            display: block;
+          }
+        }
+      }
+      .box4 {
+        position: relative;
+        .block {
+          display: none;
+          position: absolute;
+          top: 43px;
+          right: -1px;
+          border: 1px solid #f2f2f2;
+          border-top: none;
+          background: white;
+          .block_font {
+            font-size: 12px;
+            min-width: 80px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+            background: white;
+            &:hover {
+              color: #fe8c00;
+            }
+          }
+        }
+        .font {
+          font-size: 12px;
+          padding: 14px 12px;
+          &:hover {
+            color: #fe8c00;
+            background: white;
+          }
+        }
+        &:hover {
+          .font {
+            background: white;
+          }
+          .block {
+            display: block;
+          }
+        }
+      }
+      .box5 {
+        position: relative;
+        z-index: 100;
+        .block {
+          display: none;
+          width: 1190px;
+          background: white;
+          height: 300px;
+          position: absolute;
+          top: 43px;
+          right: 1px;
+          border: 1px solid #f2f2f2;
+          border-top: none;
+          .bigbox {
+            display: flex;
+            width: 100%;
+            height: 400px;
+            .one {
               width: 30%;
-              .title{
+              .title {
                 width: 100%;
                 height: 80px;
                 text-align: center;
@@ -381,28 +411,28 @@ export default {
                 font-weight: 700;
                 font-size: 14px;
               }
-              .one_title{
+              .one_title {
                 width: 70%;
                 margin: 0 auto;
                 display: flex;
                 flex-wrap: wrap;
-                .box{
+                .box {
                   width: 33%;
                   height: 30px;
                   line-height: 30px;
                   text-align: center;
-                  .item{
+                  .item {
                     font-size: 12px;
-                    &:hover{
-                      color: #FE8C00;
+                    &:hover {
+                      color: #fe8c00;
                     }
                   }
                 }
               }
             }
-            .two{
+            .two {
               width: 15%;
-              .title{
+              .title {
                 width: 100%;
                 height: 80px;
                 text-align: center;
@@ -410,100 +440,158 @@ export default {
                 font-weight: 700;
                 font-size: 14px;
               }
-              .one_title{
+              .one_title {
                 width: 100%;
                 margin: 0 auto;
                 display: flex;
                 flex-wrap: wrap;
-                .box{
+                .box {
                   width: 50%;
                   height: 30px;
                   line-height: 30px;
                   text-align: center;
-                  .item{
+                  .item {
                     font-size: 12px;
-                    &:hover{
-                      color: #FE8C00;
+                    &:hover {
+                      color: #fe8c00;
                     }
                   }
                 }
               }
             }
+          }
+          .three {
+            width: 15%;
+            .title {
+              width: 100%;
+              height: 80px;
+              text-align: center;
+              line-height: 80px;
+              font-weight: 700;
+              font-size: 14px;
             }
-            .three{
-              width: 15%;
-              .title{
+            .one_title {
+              width: 100%;
+              margin: 0 auto;
+              display: flex;
+              flex-wrap: wrap;
+              .box {
                 width: 100%;
-                height: 80px;
+                height: 30px;
+                line-height: 30px;
                 text-align: center;
-                line-height: 80px;
-                font-weight: 700;
-                font-size: 14px;
+                .item {
+                  font-size: 12px;
+                  &:hover {
+                    color: #fe8c00;
+                  }
+                }
               }
-              .one_title{
-                width: 100%;
-                margin: 0 auto;
-                display: flex;
-                flex-wrap: wrap;
-                .box{
+            }
+          }
+          .four {
+            width: 40%;
+            .title {
+              width: 100%;
+              height: 80px;
+              text-align: center;
+              line-height: 80px;
+              font-weight: 700;
+              font-size: 14px;
+            }
+            .one_title {
+              width: 80%;
+              margin: 40px 0 0 10%;
+              display: flex;
+              justify-content: space-around;
+              flex-wrap: wrap;
+              .box {
+                width: 60px;
+                height: 60px;
+                img {
                   width: 100%;
-                  height: 30px;
-                  line-height: 30px;
-                  text-align: center;
-                  .item{
-                    font-size: 12px;
-                    &:hover{
-                      color: #FE8C00;
-                    }
-                  }
-                }
-              }
-            }
-            .four{
-              width: 40%;
-              .title{
-                width: 100%;
-                height: 80px;
-                text-align: center;
-                line-height: 80px;
-                font-weight: 700;
-                font-size: 14px;
-              }
-              .one_title{
-                width: 80%;
-                margin: 40px 0 0 10%;
-                display: flex;
-                justify-content: space-around;
-                flex-wrap: wrap;
-                .box{
-                  width: 60px;
-                  height: 60px;
-                  img{
-                    width: 100%;
-                    height: 100%;
-                  }
+                  height: 100%;
                 }
               }
             }
           }
-          .font{
-            font-size: 12px;
-            padding: 14px 12px;
-            &:hover{
-               color: #FE8C00;
-               background: white;
-             }
+        }
+        .font {
+          font-size: 12px;
+          padding: 14px 12px;
+          &:hover {
+            color: #fe8c00;
+            background: white;
           }
-          &:hover{
-            .font{
-              background: white;
-            }
-            .block{
-              display: block;
-            }
+        }
+        &:hover {
+          .font {
+            background: white;
+          }
+          .block {
+            display: block;
           }
         }
       }
     }
   }
+}
+.top_header {
+  width: 100%;
+  height: 157px;
+  background: white;
+}
+.page_index {
+  width: 100%;
+  height: 425px;
+  background: #f8f8f8;
+  .center {
+    max-width: 1190px;
+    min-width: 960px;
+    height: 425px;
+    display: flex;
+    margin: 0 auto;
+    .left {
+      height: 425px;
+      width: 228px;
+      border: 1px solid #e5e5e5;
+      border-top: none;
+      background: white;
+    }
+    .center_center{
+      margin-left: 10px;
+    }
+  }
+}
+.quality{
+  width: 100%;
+  height: 774px;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  .center{
+    width: 1190px;
+    height: 694px;
+    margin: 0 auto;
+    background: white;
+  }
+}
+.all_bottom{
+  width: 100%;
+  height: 659px;
+  background: #f8f8f8;
+  .center{
+    width: 1190px;
+    height: 659px;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 1200px){
+  .quality .center{
+    width: 960px;
+  }
+  .all_bottom .center{
+    width: 960px;
+  }
+}
 </style>
