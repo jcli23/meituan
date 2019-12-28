@@ -14,8 +14,10 @@
             <div>]</div>
           </div>
           <div class="register_login">
-            <div class="login">立即登录</div>
-            <div class="register">注册</div>
+            <div v-if="username" class="login">{{username}}</div>
+            <div class="login" v-else @click="login">立即登录</div>
+            <div v-if="username" class="register" @click="outlogin">退出</div>
+            <div class="register" v-else @click="register">注册</div>
           </div>
         </div>
         <div class="right">
@@ -132,6 +134,7 @@ export default {
   },
   data() {
     return {
+      username:'',
       city: "",
       menu:[],
       banner:[],
@@ -169,8 +172,24 @@ export default {
       ]
     };
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    login(){
+       this.$router.push('/login/login')
+    },
+    register(){
+       this.$router.push('/register/register')
+    },
+    getuser(){
+      this.username=localStorage.getItem('username')
+    },
+    outlogin(){
+      localStorage.removeItem('username')
+      this.getuser()
+    }
+  },
+  mounted() {
+    this.getuser()
+  },
   async asyncData(cty) {
     let [menu, position, hotCity,city,banner] = await Promise.all([
       cty.$axios.get("menu"),
@@ -189,7 +208,11 @@ export default {
       menu:menu.data.data.menu,
       banner:banner.data.data
     };
-  }
+  },
+  computed: {
+     
+  },
+
 };
 </script>
 

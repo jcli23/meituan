@@ -69,7 +69,10 @@ export default {
   methods: {
     login(){
       this.$router.push('/login/login')
-    }
+    },
+    register(){
+      this.$router.push('/register/register')
+    },
   },
   mounted() {
     
